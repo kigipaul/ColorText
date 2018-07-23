@@ -4,7 +4,7 @@ This class generates ANSI character codes to string colors.
 '''
 
 
-class ColorText:
+class ColorText():
     B = 30  # Black
     R = 31  # Red
     G = 32  # Green
@@ -69,11 +69,11 @@ class ColorText:
                 if str_list[1] in self._INPUT:
                     front = getattr(self, str_list[1])
                 if str_list[2] in self._INPUT:
-                    back = self.get_back(getattr(self, str_list[2]))
+                    back = self.get_back(str_list[2])
         return self.get_color(
                 front=front,
                 back=back,
-                light=light
+                bright=bright
                 )
 
     def get_color(self, front, bright=False, back=0):
@@ -88,10 +88,9 @@ class ColorText:
             ANSI character color string
         '''
         rs = "m"
-        if bk != 0:
-            bk = bk + 10
-            rs = ";{}{}".format(bk, rs)
-        rs = "{}{}" % (front, rs)
+        if back != 0:
+            rs = ";{}{}".format(back, rs)
+        rs = "{}{}".format(front, rs)
         if bright:
             rs = "{};{}".format('1', rs)
         rs = "\033[{}".format(rs)
@@ -113,6 +112,6 @@ class ColorText:
             style = "1WR"
             returns a text with bright white words and red background
         '''
-        color = self.parse_style(style)
+        color = self.parse_style_str(style)
         msg = "{}{}\033[0m".format(color, msg)
         return msg
